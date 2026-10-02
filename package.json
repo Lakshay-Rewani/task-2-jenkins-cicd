@@ -1,0 +1,13 @@
+{
+  "name": "jenkins-cicd-demo",
+  "version": "1.0.0",
+  "description": "Simple Jenkins CI/CD pipeline using Docker",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "node -e \"console.log('Application test passed')\""
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
