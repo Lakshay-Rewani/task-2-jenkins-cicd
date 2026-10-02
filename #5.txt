@@ -1,0 +1,129 @@
+Started by GitHub push by Lakshay-Rewani
+Obtained Jenkinsfile from git https://github.com/Lakshay-Rewani/task-2-jenkins-cicd.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/task-2-jenkins-cicd
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/task-2-jenkins-cicd/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/Lakshay-Rewani/task-2-jenkins-cicd.git # timeout=10
+Fetching upstream changes from https://github.com/Lakshay-Rewani/task-2-jenkins-cicd.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.43.0'
+ > git fetch --tags --force --progress -- https://github.com/Lakshay-Rewani/task-2-jenkins-cicd.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 1fc0ab235f19c923f95f36cb0ab45157685be67b (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 1fc0ab235f19c923f95f36cb0ab45157685be67b # timeout=10
+Commit message: "Add Readme to check it trigger Jenkins using  webhook"
+ > git rev-list --no-walk b022067b9a28f7be2bd3280395472cdb223a8b53 # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] echo
+Checking out source code from GitHub...
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/task-2-jenkins-cicd/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/Lakshay-Rewani/task-2-jenkins-cicd.git # timeout=10
+Fetching upstream changes from https://github.com/Lakshay-Rewani/task-2-jenkins-cicd.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.43.0'
+ > git fetch --tags --force --progress -- https://github.com/Lakshay-Rewani/task-2-jenkins-cicd.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 1fc0ab235f19c923f95f36cb0ab45157685be67b (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 1fc0ab235f19c923f95f36cb0ab45157685be67b # timeout=10
+Commit message: "Add Readme to check it trigger Jenkins using  webhook"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] echo
+Building Docker image...
+[Pipeline] sh
++ docker build -t jenkins-cicd-demo:5 .
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  9.728kB
+Step 1/7 : FROM node:22-alpine
+ ---> 0a7108bf6c7b
+Step 2/7 : WORKDIR /app
+ ---> Using cache
+ ---> 156dd7bf8daa
+Step 3/7 : COPY package*.json ./
+ ---> Using cache
+ ---> 5edb53b1b387
+Step 4/7 : RUN npm install
+ ---> Using cache
+ ---> 8729c09af44a
+Step 5/7 : COPY app.js .
+ ---> Using cache
+ ---> aec89780116c
+Step 6/7 : EXPOSE 3000
+ ---> Using cache
+ ---> 0a4334736142
+Step 7/7 : CMD ["npm", "start"]
+ ---> Using cache
+ ---> 9f591dac4247
+Successfully built 9f591dac4247
+Successfully tagged jenkins-cicd-demo:5
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Test)
+[Pipeline] echo
+Testing application...
+[Pipeline] sh
++ docker run --rm jenkins-cicd-demo:5 npm test
+
+> jenkins-cicd-demo@1.0.0 test
+> node -e "console.log('Application test passed')"
+
+Application test passed
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy)
+[Pipeline] echo
+Deploying application...
+[Pipeline] sh
++ docker rm -f jenkins-cicd-app
+jenkins-cicd-app
+[Pipeline] sh
++ docker run -d --name jenkins-cicd-app -p 3000:3000 jenkins-cicd-demo:5
+f7fcae5aecf532a7613464a0b785aa3d1d09c7003ade1a6a47ee0639bf4e16e2
+[Pipeline] echo
+Application deployed successfully!
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] echo
+CI/CD Pipeline completed successfully!
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
