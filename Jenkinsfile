@@ -18,14 +18,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building Docker image...'
-                bat 'docker build -t %IMAGE_NAME%:%BUILD_NUMBER% .'
+                sh 'docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} .'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Testing Docker image...'
-                bat 'docker run --rm %IMAGE_NAME%:%BUILD_NUMBER% npm test'
+                echo 'Testing application...'
+                sh 'docker run --rm ${IMAGE_NAME}:${BUILD_NUMBER} npm test'
             }
         }
 
@@ -33,9 +33,9 @@ pipeline {
             steps {
                 echo 'Deploying application...'
 
-                bat 'docker rm -f %CONTAINER_NAME% 2>NUL || exit /B 0'
+                sh 'docker rm -f ${CONTAINER_NAME} || true'
 
-                bat 'docker run -d --name %CONTAINER_NAME% -p 3000:3000 %IMAGE_NAME%:%BUILD_NUMBER%'
+                sh 'docker run -d --name ${CONTAINER_NAME} -p 3000:3000 ${IMAGE_NAME}:${BUILD_NUMBER}'
 
                 echo 'Application deployed successfully!'
             }
